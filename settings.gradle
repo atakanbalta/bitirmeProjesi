@@ -1,0 +1,2 @@
+rootProject.name='FattoFitv2'
+include ':app'
