@@ -10,16 +10,15 @@
         android:name="com.atakanbalta.fattofitv2.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
-
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
+            app:destination="@id/nav_profile" />
     </fragment>
     <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.atakanbalta.fattofitv2.ui.home.HomeSecondFragment"
+        android:id="@+id/nav_profile"
+        android:name="com.atakanbalta.fattofitv2.ProfileFragment"
         android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
             app:destination="@id/nav_home" />
@@ -30,14 +29,32 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.atakanbalta.fattofitv2.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_goal"
+        android:name="com.atakanbalta.fattofitv2.GoalFragment"
+        android:label="@string/goal"
+        tools:layout="@layout/fragment_goal" >
+        <action
+            android:id="@+id/action_nav_goal_to_nav_categories"
+            app:destination="@id/nav_categories" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.atakanbalta.fattofitv2.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_categories"
+        android:name="com.atakanbalta.fattofitv2.CategoriesFragment"
+        android:label="@string/categories"
+        tools:layout="@layout/fragment_categories" >
+        <action
+            android:id="@+id/action_nav_categories_to_nav_home"
+            app:destination="@id/nav_categories" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_food"
+        android:name="com.atakanbalta.fattofitv2.FoodFragment"
+        android:label="@string/food"
+        tools:layout="@layout/fragment_food" >
+        <action
+            android:id="@+id/action_nav_food_to_nav_goal"
+            app:destination="@id/nav_goal" />
+    </fragment>
+
 </navigation>

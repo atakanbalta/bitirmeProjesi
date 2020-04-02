@@ -14,7 +14,7 @@ public class DBAdapter {
 
 
     private static final String databaseName ="fattofitv5";
-    private static final int databaseVersion =1;
+    private static final int databaseVersion =4;
 
 
 
@@ -40,7 +40,8 @@ public class DBAdapter {
             try{
                 // Create table goal
                 db.execSQL("CREATE TABLE IF NOT EXISTS goal (" +
-                        " goal_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " goal_id INTEGER," +
                         " goal_current_weight INT, "+
                         " goal_target_weight INT, "+
                         " goal_i_want_to VARCHAR, "+
@@ -70,7 +71,8 @@ public class DBAdapter {
             try{
                 // Create tables
                 db.execSQL("CREATE TABLE IF NOT EXISTS users (" +
-                        " user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " user_id INTEGER , " +
                         " user_email VARCHAR," +
                         " user_password VARCHAR, " +
                         " user_salt VARCHAR, " +
@@ -91,7 +93,8 @@ public class DBAdapter {
 
             try{
                 db.execSQL("CREATE TABLE IF NOT EXISTS food_diary_cal_eaten (" +
-                        " cal_eaten_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " cal_eaten_id INTEGER , " +
                         " cal_eaten_date DATE, " +
                         " cal_eaten_meal_no INT, " +
                         " cal_eaten_energy INT, " +
@@ -105,7 +108,8 @@ public class DBAdapter {
 
             try{
                 db.execSQL("CREATE TABLE IF NOT EXISTS food_diary (" +
-                        " fd_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " fd_id INTEGER ," +
                         " fd_date DATE," +
                         " fd_meal_number INT," +
                         " fd_food_id INT," +
@@ -123,7 +127,8 @@ public class DBAdapter {
             }
             try{
                 db.execSQL("CREATE TABLE IF NOT EXISTS categories (" +
-                        " category_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " category_id INTEGER ," +
                         " category_name VARCHAR," +
                         " category_parent_id INT," +
                         " category_icon VARCHAR," +
@@ -135,9 +140,11 @@ public class DBAdapter {
             }
             try {
                 db.execSQL("CREATE TABLE IF NOT EXISTS food (" +
-                        " food_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " food_id INTEGER, " +
                         " food_name VARCHAR," +
                         " food_manufactor_name VARCHAR," +
+                        "food_description VARCHAR," +
                         " food_serving_size DOUBLE," +
                         " food_serving_mesurment VARCHAR," +
                         " food_serving_name_number DOUBLE," +
@@ -168,7 +175,7 @@ public class DBAdapter {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 
             // ! All tables that are going to be dropped need to be listed here
@@ -282,6 +289,54 @@ public class DBAdapter {
         return mCursor;
     }
 
+    // Select All where (Long)
+    public Cursor select(String table, String[] fields, String whereClause, long whereCondition) throws SQLException {
+                /* Select example:
+                long row = 3;
+                String fields[] = new String[] {
+                                "food_id",
+                                "food_name",
+                                "food_manufactor_name"
+                };
+                allCategories = db.selectAllWhere("categories", fields, "category_parent_id", row);
+                displayRecordFromNotes(c);
+                */
+
+        Cursor mCursor = db.query(table, fields, whereClause + "=" + whereCondition, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+    // Select All where (String)
+    public Cursor select(String table, String[] fields, String whereClause, String whereCondition) throws SQLException
+    {
+                /* Select example:
+                                Cursor allCategories;
+                String fields[] = new String[] {
+                                "category_id",
+                                "category_name",
+                                "category_parent_id"
+                };
+                allCategories = db.select("categories", fields, "category_parent_id", "0");
+                */
+        Cursor mCursor = db.query(table, fields, whereClause + "=" + whereCondition, null, null, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
+    public Cursor select(String table, String[] fields, String whereClause, String whereCondition, String orderBy, String OrderMethod) throws SQLException
+    {
+        Cursor mCursor = db.query(table, fields, whereClause + "=" + whereCondition, null, null, null, orderBy + " " + OrderMethod, null);
+
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
     /* 11 Update ----------------------------------------------------------------- */
     public boolean update(String table, String primaryKey, long rowId, String field, String value) {
         /* Update example:
@@ -290,7 +345,6 @@ public class DBAdapter {
         String valueSQL = db.quoteSmart(value);
         db.update("users", "user_id", id, "user_email", valueSQL);
          */
-
         // Remove first and last value of value
         value = value.substring(1, value.length()-1); // removes ' after running quote smart
 
