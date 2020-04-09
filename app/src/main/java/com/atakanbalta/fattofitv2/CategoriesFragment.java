@@ -391,7 +391,7 @@ public class CategoriesFragment extends Fragment {
         EditText editTextName = (EditText)getActivity().findViewById(R.id.editTextName);
         String stringName = editTextName.getText().toString();
         if(stringName.equals("")){
-            Toast.makeText(getActivity(), "Please fill in a name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Lütfen bir isim giriniz", Toast.LENGTH_SHORT).show();
             error = 1;
         }
 
@@ -480,16 +480,16 @@ public class CategoriesFragment extends Fragment {
 
     }
     public void deleteCategoryConfirmOnClick(){
-        // Delete from SQL
+        // SQLden sil
 
         /* Database */
         DBAdapter db = new DBAdapter(getActivity());
         db.open();
 
-        // Current ID to long
+        // Güncel ID to long
         long longCurrentID = Long.parseLong(currentId);
 
-        // Ready variables
+        // Degiskenler
         long currentIDSQL = db.quoteSmart(longCurrentID);
 
         // Delete
@@ -498,10 +498,10 @@ public class CategoriesFragment extends Fragment {
         // Close db
         db.close();
 
-        // Give message
+        //  message
         Toast.makeText(getActivity(), "Kategori başarıyla silindi!", Toast.LENGTH_LONG).show();
 
-        // Move user back to correct design
+        // Dizayna geri dön
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, new CategoriesFragment(), CategoriesFragment.class.getName()).commit();
 
