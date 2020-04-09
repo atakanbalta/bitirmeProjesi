@@ -14,7 +14,7 @@ public class DBAdapter {
 
 
     private static final String databaseName ="fattofitv5";
-    private static final int databaseVersion =4;
+    private static final int databaseVersion =9 ;
 
 
 
@@ -144,7 +144,7 @@ public class DBAdapter {
                         " food_id INTEGER, " +
                         " food_name VARCHAR," +
                         " food_manufactor_name VARCHAR," +
-                        "food_description VARCHAR," +
+                        " food_description VARCHAR," +
                         " food_serving_size DOUBLE," +
                         " food_serving_mesurment VARCHAR," +
                         " food_serving_name_number DOUBLE," +
@@ -164,6 +164,7 @@ public class DBAdapter {
                         " food_image_a VARCHAR," +
                         " food_image_b VARCHAR," +
                         " food_image_c VARCHAR," +
+                        " food_last_used DATE," +
                         " food_notes VARCHAR);");
 
 
@@ -241,6 +242,8 @@ public class DBAdapter {
     public int quoteSmart(int value) {
         return value;
     }
+    public long quoteSmart(long value) { return value; }
+
 
     /* 08 Insert data ------------------------------------------------------------ */
     public void insert(String table, String fields, String values){
@@ -289,6 +292,7 @@ public class DBAdapter {
         return mCursor;
     }
 
+
     // Select All where (Long)
     public Cursor select(String table, String[] fields, String whereClause, long whereCondition) throws SQLException {
                 /* Select example:
@@ -329,13 +333,21 @@ public class DBAdapter {
 
     public Cursor select(String table, String[] fields, String whereClause, String whereCondition, String orderBy, String OrderMethod) throws SQLException
     {
-        Cursor mCursor = db.query(table, fields, whereClause + "=" + whereCondition, null, null, null, orderBy + " " + OrderMethod, null);
-
+        Cursor mCursor = null;
+        if(whereClause.equals("")) {
+            // We dont want to se where
+            mCursor = db.query(table, fields, null, null, null, null, orderBy + " " + OrderMethod, null);
+        }
+        else {
+            mCursor = db.query(table, fields, whereClause + "=" + whereCondition, null, null, null, orderBy + " " + OrderMethod, null);
+        }
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         return mCursor;
     }
+
+
 
     /* 11 Update ----------------------------------------------------------------- */
     public boolean update(String table, String primaryKey, long rowId, String field, String value) {
@@ -361,6 +373,30 @@ public class DBAdapter {
         ContentValues args = new ContentValues();
         args.put(field, value);
         return db.update(table, args, primaryKey + "=" + rowId, null) > 0;
+    }
+    public boolean update(String table, String primaryKey, long rowID, String fields[], String values[]){
+
+
+        ContentValues args = new ContentValues();
+        int arraySize = fields.length;
+        for(int x=0;x<arraySize;x++){
+            // Remove first and last value of value
+            values[x] = values[x].substring(1, values[x].length()-1); // removes ' after running quote smart
+
+            // Put
+            args.put(fields[x], values[x]);
+        }
+
+        return db.update(table, args, primaryKey + "=" + rowID, null) > 0;
+    }
+
+
+
+
+    /* 12 Delete ----------------------------------------------------------------- */
+    // Delete a particular record
+    public int delete(String table, String primaryKey, long rowID) throws SQLException {
+        return db.delete(table, primaryKey + "=" + rowID, null);
     }
 
 
