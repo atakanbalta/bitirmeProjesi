@@ -76,8 +76,8 @@
         <item>Çok Ağır Egzersiz/Pro(Günde 2 kere, Aşırı ağır antrenman)</item>
     </string-array>
 
-    <string name="i_want_to">İstiyorum</string>
-    <string name="i_want">İstiyorum</string>
+    <string name="i_want_to">Hedef</string>
+    <string name="i_want">Hedef</string>
     <string name="sign_up">KAYIT OL</string>
 
     <string name="weekly_goal">HAFTALIK HEDEF</string>
@@ -135,7 +135,7 @@
 
 
 
-    <string name="word">Word</string>
+    <string name="word">-</string>
 
     <!-- dersten sonra yap -->
     <string name="barcode">---</string>
@@ -151,18 +151,18 @@
     <string name="status">Durum</string>
     <string name="method">Metod</string>
     <string name="bmr">BMR</string>
-    <string name="numbers">Numbers</string>
+    <string name="numbers">Detaylar</string>
     <string name="diet">Diyet</string>
     <string name="with_activity">Aktivite ile</string>
     <string name="with_activity_and_diet">Aktivite ve diyet ile </string>
 
-    <string name="if_you_want_to_keep_your_weight">Kilonu korumak istiyorusan</string>
+    <string name="if_you_want_to_keep_your_weight">Kilonu korumak istiyorsan</string>
     <string name="if_you_want_to_loose_weight">Kilo kaybetmek istiyorsan</string>
     <string name="if_you_want_to">If you want to</string>
     <string name="keep_your_weight">Kilonu koru</string>
-    <string name="loose_x_kg_week_with_out_exercising">Loose x kg each week with out exercising</string>
+    <string name="loose_x_kg_week_with_out_exercising">Egzersizsiz haftada x kilo kaybet</string>
     <string name="without_activity">Etkinliksiz</string>
-    <string name="advanced">Advanced</string>
+    <string name="advanced">Detay</string>
     <string name="with_activity_">Etkinlikli</string>
     <string name="edit">Düzenle</string>
 

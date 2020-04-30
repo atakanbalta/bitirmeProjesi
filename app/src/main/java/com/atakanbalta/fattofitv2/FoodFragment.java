@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ public class FoodFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     /*- 01 Sınıf değişkenleri -------------------------------------------------------------- */
+
     private View mainView;
     private Cursor listCursor;
 
@@ -67,7 +69,7 @@ public class FoodFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Başlık */
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Food");
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Yiyecekler");
 
         // Kategori listesini doldur
         populateListFood();
@@ -120,13 +122,13 @@ public class FoodFragment extends Fragment {
 
         int id = menuItem.getItemId();
         if (id == R.id.menu_action_food_add) {
-
+            addFood();
         }
         if (id == R.id.menu_action_food_edit) {
             editFood();
         }
         if (id == R.id.menu_action_food_delete) {
-
+            deleteFood();
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -853,6 +855,404 @@ public class FoodFragment extends Fragment {
 
         db.close();
     } // buttonEditFoodSubmitOnClick
+    // DELETE FOOD-------------------------------------------------------------------------
+    public void deleteFood(){
+
+        /* Change layout */
+        int id = R.layout.fragment_food_delete;
+        setMainView(id);
+
+
+        /* buttonCategoriesCancel listener */
+        Button buttonCancel = (Button)getActivity().findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFoodCancel();
+            }
+        });
+
+
+        /* buttonCategoriesConfirmDelete listener */
+        Button buttonConfirmDelete = (Button)getActivity().findViewById(R.id.buttonConfirmDelete);
+        buttonConfirmDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFoodConfirmDelete();
+            }
+        });
+
+    } // deleteFood
+
+
+
+    /*- Delete food cancel ----------------------------------------------------------------- */
+    /*- Delete food cancel ----------------------------------------------------------------- */
+    public void deleteFoodCancel(){
+        // Move user back to correct design
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, new FoodFragment(), FoodFragment.class.getName()).commit();
+
+
+    }
+
+    public void deleteFoodConfirmDelete(){
+        DBAdapter db= new DBAdapter(getActivity());
+        db.open();
+
+        // Güncel idyi longa cevir
+        long longCurrentID=Long.parseLong(currentId);
+        //degisken
+        long currentIDSQL = db.quoteSmart(longCurrentID);
+        //delete
+        db.delete("food","_id",currentIDSQL);
+
+        //db kapat
+        db.close();
+
+        //Mesaj ver
+        Toast.makeText(getActivity(),"Yiyecek başarıyla silindi",Toast.LENGTH_LONG).show();
+
+        //Kullanıcıyı eski fragmente döndür
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, new FoodFragment(), FoodFragment.class.getName()).commit();
+
+    }
+    /*- Add food ------------------------------------------------------------------------------ */
+    public void addFood(){
+        /* Database */
+        DBAdapter db = new DBAdapter(getActivity());
+        db.open();
+
+        /* Change layout */
+        int id = R.layout.fragment_food_edit;
+        setMainView(id);
+
+        // Change title
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add food");
+
+
+        /* Main category */
+        String spinnerFields[] = new String[] {
+                "_id",
+                "category_name",
+                "category_parent_id"
+        };
+        Cursor dbCursorMain = db.select("categories", spinnerFields, "category_parent_id", "0", "category_name", "ASC");
+
+        // Creating array
+        int dbCursorCount = dbCursorMain.getCount();
+        String[] arraySpinnerMainCategories = new String[dbCursorCount];
+
+        // Convert Cursor to String
+        for(int x=0;x<dbCursorCount;x++){
+            arraySpinnerMainCategories[x] = dbCursorMain.getString(1).toString();
+            dbCursorMain.moveToNext();
+        }
+
+        // Populate spinner
+        Spinner spinnerCatMain = (Spinner) getActivity().findViewById(R.id.spinnerEditFoodCategoryMain);
+        ArrayAdapter<String> adapterMain = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, arraySpinnerMainCategories);
+        spinnerCatMain.setAdapter(adapterMain);
+
+
+        /* Main Category listener */
+        spinnerCatMain.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selectedItem = parent.getItemAtPosition(position).toString(); //this is your selected item
+                // Toast.makeText(getActivity(), "Category changed to " + selectedItem, Toast.LENGTH_SHORT).show();
+                editFoodMainCategoryChanged(selectedItem);
+            }
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+        /* SubmitButton listener */
+        Button buttonEditFood = (Button)getActivity().findViewById(R.id.buttonEditFood);
+        buttonEditFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonAddFoodSubmitOnClick();
+            }
+        });
+
+
+        /* Close db */
+        db.close();
+    } // addFood
+    /*- Button add food submit on click ----------------------------------------------------- */
+    public void buttonAddFoodSubmitOnClick(){
+        /* Database */
+        DBAdapter db = new DBAdapter(getActivity());
+        db.open();
+
+        // Error?
+        int error = 0;
+
+
+        /* General */
+
+        // Name
+        EditText editTextEditFoodName = (EditText)getActivity().findViewById(R.id.editTextEditFoodName);
+        String stringName = editTextEditFoodName.getText().toString();
+        String stringNameSQL = db.quoteSmart(stringName);
+        if(stringName.equals("")){
+            Toast.makeText(getActivity(), "Please fill in a name.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+
+        // Manufactor
+        EditText editTextEditFoodManufactor = (EditText)getActivity().findViewById(R.id.editTextEditFoodManufactor);
+        String stringManufactor = editTextEditFoodManufactor.getText().toString();
+        String stringManufactorSQL = db.quoteSmart(stringManufactor);
+        if(stringManufactor.equals("")){
+            Toast.makeText(getActivity(), "Please fill in a manufactor.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+
+        // Description
+        EditText editTextEditFoodDescription = (EditText)getActivity().findViewById(R.id.editTextEditFoodDescription);
+        String stringDescription = editTextEditFoodDescription.getText().toString();
+        String stringDescriptionSQL = db.quoteSmart(stringDescription);
+
+        // Barcode
+        EditText editTextEditFoodBarcode = (EditText)getActivity().findViewById(R.id.editTextEditFoodBarcode);
+        String stringBarcode = editTextEditFoodBarcode.getText().toString();
+        String stringBarcodeSQL = db.quoteSmart(stringBarcode);
+
+        /* Category */
+        // Sub category
+        Spinner spinnerSubCat = (Spinner)getActivity().findViewById(R.id.spinnerEditFoodCategorySub);
+        int intSubCategoryIndex = spinnerSubCat.getSelectedItemPosition();
+        String stringSpinnerSubCategoryName = spinnerSubCat.getSelectedItem().toString();
+
+        // Find we want to find parent ID from the text
+        String stringSpinnerSubCategoryNameSQL = db.quoteSmart(stringSpinnerSubCategoryName);
+        String spinnerFields[] = new String[] {
+                "_id",
+                "category_name",
+                "category_parent_id"
+        };
+        Cursor findstringSpinnerSubCategoryID = db.select("categories", spinnerFields, "category_name", stringSpinnerSubCategoryNameSQL);
+        String stringSubCategoryID  = findstringSpinnerSubCategoryID.getString(0).toString();
+        String stringSubCategoryIDSQL = db.quoteSmart(stringSubCategoryID);
+
+
+        /* Serving Table */
+
+        // Size
+        EditText editTextEditFoodSize = (EditText)getActivity().findViewById(R.id.editTextEditFoodSize);
+        String stringSize = editTextEditFoodSize.getText().toString();
+        String stringSizeSQL = db.quoteSmart(stringSize);
+        double doubleServingSize = 0;
+        if(stringSize.equals("")){
+            Toast.makeText(getActivity(), "Please fill in a size.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+        else{
+            try {
+                doubleServingSize = Double.parseDouble(stringSize);
+            }
+            catch(NumberFormatException nfe) {
+                Toast.makeText(getActivity(), "Serving size is not number.", Toast.LENGTH_SHORT).show();
+                error = 1;
+            }
+        }
+
+        // Mesurment
+        EditText editTextEditFoodMesurment = (EditText)getActivity().findViewById(R.id.editTextEditFoodMesurment);
+        String stringMesurment = editTextEditFoodMesurment.getText().toString();
+        String stringMesurmentSQL = db.quoteSmart(stringMesurment);
+        if(stringMesurment.equals("")){
+            Toast.makeText(getActivity(), "Please fill in mesurment.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+
+        // Number
+        EditText editTextEditFoodNumber = (EditText)getActivity().findViewById(R.id.editTextEditFoodNumber);
+        String stringNumber = editTextEditFoodNumber.getText().toString();
+        String stringNumberSQL = db.quoteSmart(stringNumber);
+        if(stringNumber.equals("")){
+            Toast.makeText(getActivity(), "Please fill in number.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+
+        // Word
+        EditText editTextEditFoodWord = (EditText)getActivity().findViewById(R.id.editTextEditFoodWord);
+        String stringWord = editTextEditFoodWord.getText().toString();
+        String stringWordSQL = db.quoteSmart(stringWord);
+        if(stringWord.equals("")){
+            Toast.makeText(getActivity(), "Please fill in word.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+
+
+        /* Calories table */
+        // Energy
+        EditText editTextEditFoodEnergyPerHundred = (EditText)getActivity().findViewById(R.id.editTextEditFoodEnergyPerHundred);
+        String stringEnergyPerHundred = editTextEditFoodEnergyPerHundred.getText().toString();
+        stringEnergyPerHundred = stringEnergyPerHundred.replace(",", ".");
+        double doubleEnergyPerHundred = 0;
+        if(stringEnergyPerHundred.equals("")){
+            Toast.makeText(getActivity(), "Please fill in energy.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+        else{
+            try {
+                doubleEnergyPerHundred = Double.parseDouble(stringEnergyPerHundred);
+            }
+            catch(NumberFormatException nfe) {
+                Toast.makeText(getActivity(), "Energy is not a number.", Toast.LENGTH_SHORT).show();
+                error = 1;
+            }
+        }
+        String stringEnergyPerHundredSQL = db.quoteSmart(stringEnergyPerHundred);
+
+        // Proteins
+        EditText editTextEditFoodProteinsPerHundred = (EditText)getActivity().findViewById(R.id.editTextEditFoodProteinsPerHundred);
+        String stringProteinsPerHundred = editTextEditFoodProteinsPerHundred.getText().toString();
+        stringProteinsPerHundred = stringProteinsPerHundred.replace(",", ".");
+        double doubleProteinsPerHundred = 0;
+        if(stringProteinsPerHundred.equals("")){
+            Toast.makeText(getActivity(), "Please fill in proteins.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+        else{
+            try {
+                doubleProteinsPerHundred = Double.parseDouble(stringProteinsPerHundred);
+            }
+            catch(NumberFormatException nfe) {
+                Toast.makeText(getActivity(), "Protein is not a number.\n" + "You wrote: " + stringProteinsPerHundred, Toast.LENGTH_SHORT).show();
+                error = 1;
+            }
+        }
+        String stringProteinsPerHundredSQL = db.quoteSmart(stringProteinsPerHundred);
+
+        // Carbs
+        EditText editTextEditFoodCarbsPerHundred = (EditText)getActivity().findViewById(R.id.editTextEditFoodCarbsPerHundred);
+        String stringCarbsPerHundred = editTextEditFoodCarbsPerHundred.getText().toString();
+        stringCarbsPerHundred = stringCarbsPerHundred.replace(",", ".");
+        double doubleCarbsPerHundred = 0;
+        if(stringCarbsPerHundred.equals("")){
+            Toast.makeText(getActivity(), "Please fill in carbs.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+        else{
+            try {
+                doubleCarbsPerHundred = Double.parseDouble(stringCarbsPerHundred);
+            }
+            catch(NumberFormatException nfe) {
+                Toast.makeText(getActivity(), "Carbs is not a number.\nYou wrote: " + stringCarbsPerHundred, Toast.LENGTH_SHORT).show();
+                error = 1;
+            }
+        }
+        String stringCarbsPerHundredSQL = db.quoteSmart(stringCarbsPerHundred);
+
+        // Fat
+        EditText editTextEditFoodFatPerHundred = (EditText)getActivity().findViewById(R.id.editTextEditFoodFatPerHundred);
+        String stringFatPerHundred = editTextEditFoodFatPerHundred.getText().toString();
+        stringFatPerHundred = stringFatPerHundred.replace(",", ".");
+        double doubleFatPerHundred = 0;
+        if(stringFatPerHundred.equals("")){
+            Toast.makeText(getActivity(), "Please fill in fat.", Toast.LENGTH_SHORT).show();
+            error = 1;
+        }
+        else{
+            try {
+                doubleFatPerHundred = Double.parseDouble(stringFatPerHundred);
+            }
+            catch(NumberFormatException nfe) {
+                Toast.makeText(getActivity(), "Carbs is not a number.", Toast.LENGTH_SHORT).show();
+                error = 1;
+            }
+        }
+        String stringFatPerHundredSQL = db.quoteSmart(stringFatPerHundred);
+
+
+
+        /* Insert */
+        if(error == 0){
+
+            /* Calories table pr meal */
+            double energyCalculated = Math.round((doubleEnergyPerHundred*doubleServingSize)/100);
+            double proteinsCalculated = Math.round((doubleProteinsPerHundred*doubleServingSize)/100);
+            double carbsCalculated = Math.round((doubleCarbsPerHundred*doubleServingSize)/100);
+            double fatCalculated = Math.round((doubleFatPerHundred*doubleServingSize)/100);
+
+            String stringEnergyCalculated = "" + energyCalculated;
+            String stringProteinsCalculated = "" + proteinsCalculated;
+            String stringCarbsCalculated = "" + carbsCalculated;
+            String stringfatCalculated = "" + fatCalculated;
+
+            String stringEnergyCalculatedSQL = db.quoteSmart(stringEnergyCalculated);
+            String stringProteinsCalculatedSQL = db.quoteSmart(stringProteinsCalculated);
+            String stringCarbsCalculatedSQL = db.quoteSmart(stringCarbsCalculated);
+            String stringfatCalculatedSQL = db.quoteSmart(stringfatCalculated);
+
+
+            String fields =
+                    "_id, " +
+                            "food_name, " +
+                            "food_manufactor_name, " +
+                            "food_description, " +
+                            "food_serving_size, " +
+                            "food_serving_mesurment, " +
+                            "food_serving_name_number, " +
+                            "food_serving_name_word, " +
+                            "food_energy, " +
+                            "food_proteins, " +
+                            "food_carbohydrates, " +
+                            "food_fat, " +
+                            "food_energy_calculated, " +
+                            "food_proteins_calculated, " +
+                            "food_carbohydrates_calculated, " +
+                            "food_fat_calculated, " +
+                            "food_barcode, " +
+                            "food_category_id";
+
+            String values =
+                    "NULL, " +
+                            stringNameSQL + ", " +
+                            stringManufactorSQL + ", " +
+                            stringDescriptionSQL + ", " +
+                            stringSizeSQL + ", " +
+                            stringMesurmentSQL + ", " +
+                            stringNumberSQL + ", " +
+                            stringWordSQL + ", " +
+                            stringEnergyPerHundredSQL + ", " +
+                            stringProteinsPerHundredSQL + ", " +
+                            stringCarbsPerHundredSQL + ", " +
+                            stringFatPerHundredSQL + ", " +
+                            stringEnergyCalculatedSQL + ", " +
+                            stringProteinsCalculatedSQL + ", " +
+                            stringCarbsCalculatedSQL + ", " +
+                            stringfatCalculatedSQL + ", " +
+                            stringBarcodeSQL + ", " +
+                            stringSubCategoryIDSQL;
+
+
+            db.insert("food", fields, values);
+
+            // Toast
+            Toast.makeText(getActivity(), "Yiyecek başarıyla oluşturuldu", Toast.LENGTH_SHORT).show();
+
+            // Move user back to correct design
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new FoodFragment(), FoodFragment.class.getName()).commit();
+
+        } // error == 0
+
+
+        /* Close db */
+        db.close();
+    } // buttonAddFoodSubmitOnClick
+
+
 
 
     @Override

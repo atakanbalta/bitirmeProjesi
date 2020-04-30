@@ -16,23 +16,21 @@ public class FoodCursorAdapter extends CursorAdapter {
         super(context, cursor, 0);
     }
 
-    // The newView method is used to inflate a new view and return it,
-    // you dont bind any data to the view at this point.
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.fragmen_food_list_item, parent, false);
     }
 
-    // The bindView method is used to bind all data to a given view
-    // such as setting the text on a TextView.
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Find fields to populate in inflated template
+        //
         TextView textViewListName = (TextView) view.findViewById(R.id.textViewListName);
         TextView textViewListNumber = (TextView) view.findViewById(R.id.textViewListNumber);
         TextView textViewListSubName = (TextView) view.findViewById(R.id.textViewListSubName);
 
-        // Extract properties from cursor
+        //
         int getID = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String getName = cursor.getString(cursor.getColumnIndexOrThrow("food_name"));
 
@@ -50,7 +48,7 @@ public class FoodCursorAdapter extends CursorAdapter {
                 getServingNameNumber + " " +
                 getServingNameWord;
 
-        // Populate fields with extracted properties
+        //
         textViewListName.setText(getName);
         textViewListNumber.setText(String.valueOf(getEnergyCalculated));
         textViewListSubName.setText(subLine);

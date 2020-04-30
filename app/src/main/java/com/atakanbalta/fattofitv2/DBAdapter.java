@@ -14,7 +14,7 @@ public class DBAdapter {
 
 
     private static final String databaseName ="fattofitv5";
-    private static final int databaseVersion =9 ;
+    private static final int databaseVersion =11 ;
 
 
 
@@ -40,13 +40,14 @@ public class DBAdapter {
             try{
                 // Create table goal
                 db.execSQL("CREATE TABLE IF NOT EXISTS goal (" +
-                        "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        " goal_id INTEGER," +
+                        " _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " goal_id INT, "+
                         " goal_current_weight INT, "+
                         " goal_target_weight INT, "+
                         " goal_i_want_to VARCHAR, "+
                         " goal_weekly_goal VARCHAR, "+
                         " goal_date DATE, "+
+                        " goal_activity_level INT, " +
                         " goal_energy_bmr INT, "+
                         " goal_proteins_bmr INT, "+
                         " goal_carbs_bmr INT, "+
@@ -331,6 +332,7 @@ public class DBAdapter {
         return mCursor;
     }
 
+    // Select with order
     public Cursor select(String table, String[] fields, String whereClause, String whereCondition, String orderBy, String OrderMethod) throws SQLException
     {
         Cursor mCursor = null;
@@ -346,7 +348,6 @@ public class DBAdapter {
         }
         return mCursor;
     }
-
 
 
     /* 11 Update ----------------------------------------------------------------- */
