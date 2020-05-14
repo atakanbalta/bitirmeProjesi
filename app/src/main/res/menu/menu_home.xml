@@ -2,9 +2,8 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- Search / will display always -->
-    <item android:id="@+id/action_search"
-        android:icon="@drawable/ic_menu_home"
+    <item android:id="@+id/menu_action_add_food"
+        android:icon="@drawable/ic_menu_action_restaurant"
         android:title="@string/add"
         app:showAsAction="ifRoom"/>
 

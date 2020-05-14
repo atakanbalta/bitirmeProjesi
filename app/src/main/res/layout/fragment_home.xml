@@ -2,6 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true">
@@ -16,67 +17,294 @@
         android:layout_marginLeft="18dp">
 
 
-        <!-- Breakfast -->
-
+        <!-- kahvaltı -->
         <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="108dp">
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:id="@+id/tableRowHeadlineBreakfast"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/imageViewAddBreakfast"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_menu_add" />
 
                 <TextView
                     android:id="@+id/textViewHeadlineBreakfast"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="80"
                     android:text="@string/breakfast"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergyBreakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
                     android:textSize="18sp" />
             </TableRow>
         </TableLayout>
-        <!-- //Breakfast -->
-
-        <!-- Lunch -->
-
         <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/tableLayoutBreakfastItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //kahvaltı -->
+
+        <!-- Öğlen yemeği -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:id="@+id/tableRowHeadlineLunch"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/imageViewAddLunch"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_menu_add" />
 
                 <TextView
                     android:id="@+id/textViewHeadlineLunch"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="80"
                     android:text="@string/lunch"
                     android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergyLunch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
             </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutLunchItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
         </TableLayout>
+        <!-- //Öğlen yemeği -->
 
+        <!-- Antrenmandan önce -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
+            <TableRow
+                android:id="@+id/tableRowHeadlineBeforeTraining"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/imageViewAddBeforeTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_add" />
 
+                <TextView
+                    android:id="@+id/textViewHeadlineBeforeTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:text="@string/before_training"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergyBeforeTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutBeforeTrainingItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //antrenmandan önce -->
+
+        <!-- antrenmandan sonra -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/tableRowHeadlineAfterTraining"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewAddAfterTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_add" />
+
+                <TextView
+                    android:id="@+id/textViewHeadlineAfterTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:text="@string/after_training"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergyAfterTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutAfterTrainingItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //antrenmandan sonra -->
+
+        <!-- Akşam yemeği -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/tableRowHeadlineDinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewAddDinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_add" />
+
+                <TextView
+                    android:id="@+id/textViewHeadlineDinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:text="@string/dinner"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergyDinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutDinnerItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //akşam yemeği -->
+
+        <!-- Atıştırmalıklar -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/tableRowHeadlineSnacks"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewAddSnacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_add" />
+
+                <TextView
+                    android:id="@+id/textViewHeadlineSnacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:text="@string/snacks"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergySnacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutSnacksItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //atıştırmalıklar -->
+
+        <!-- sup -->
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/tableRowHeadlineSupper"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewAddSupper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_add" />
+
+                <TextView
+                    android:id="@+id/textViewHeadlineSupper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="80"
+                    android:text="@string/supper"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textViewEnergySupper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:text="@string/energy"
+                    android:textSize="18sp" />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:id="@+id/tableLayoutSupperItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        </TableLayout>
+        <!-- //sup -->
 
 
     </LinearLayout>
-
-
-
 
 </ScrollView>

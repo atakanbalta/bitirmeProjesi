@@ -173,13 +173,14 @@
     <string name="after_training">Antrenmandan sonra</string>
     <string name="dinner">Akşam Yemeği</string>
     <string name="snacks">Atıştırmalıklar</string>
-    <string name="supper">Akşam atıştırmalık</string>
+    <string name="supper">Supplementler</string>
 
     <string name="portion_size">Porsiyon boyutu</string>
-    <string name="pcs">pcs</string>
+    <string name="portion_size_gram">Porsiyon boyutu gram</string>
+    <string name="pcs">Servis</string>
     <string name="gram">gram</string>
     <string name="add_to_diary">Günlüğe ekle</string>
-    <string name="unlink">Unlink</string>
+    <string name="unlink">Vazgeç</string>
     <string name="goal_with_activity">Goal with activity</string>
     <string name="sum">Sum</string>
     <string name="remaining">Kalan</string>

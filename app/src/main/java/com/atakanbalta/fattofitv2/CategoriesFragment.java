@@ -183,9 +183,7 @@ public class CategoriesFragment extends Fragment {
         int categoriesCount =categoriesCursor.getCount();
         for (int x =0;x<categoriesCount;x++){
             values.add(categoriesCursor.getString(categoriesCursor.getColumnIndex("category_name")));
-             /*Toast.makeText(getActivity(),
-                    "Id: " + categoriesCursor.getString(0) + "\n" +
-                            "Name: " + categoriesCursor.getString(1), Toast.LENGTH_SHORT).show(); */
+
              categoriesCursor.moveToNext();
         }
 
@@ -321,7 +319,6 @@ public class CategoriesFragment extends Fragment {
         catch(NumberFormatException nfe) {
             System.out.println("Could not parse " + nfe);
         }
-        // Toast.makeText(getActivity(), "Parent ID: " + parentID, Toast.LENGTH_SHORT).show();
 
         /* Fill name */
         EditText editTextName = (EditText) getActivity().findViewById(R.id.editTextName);
@@ -526,7 +523,7 @@ public class CategoriesFragment extends Fragment {
         EditText editTextName = (EditText)getActivity().findViewById(R.id.editTextName);
         String stringName = editTextName.getText().toString();
         if(stringName.equals("")){
-            Toast.makeText(getActivity(), "Please fill in a name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Bir isim giriniz.", Toast.LENGTH_SHORT).show();
             error = 1;
         }
 
@@ -562,7 +559,7 @@ public class CategoriesFragment extends Fragment {
             db.insert("categories", "_id, category_name, category_parent_id", input);
 
             //  feedback
-            Toast.makeText(getActivity(), "Category created", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Kategori başarıyla oluşturuldu", Toast.LENGTH_LONG).show();
 
             // Dizayna geri dön
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

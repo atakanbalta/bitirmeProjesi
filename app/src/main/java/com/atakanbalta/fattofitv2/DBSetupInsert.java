@@ -1,40 +1,52 @@
 package com.atakanbalta.fattofitv2;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 
 public class DBSetupInsert {
 
 
+
+    /* Variables */
     private final Context context;
 
-
-    /*PUBLIC CLASSS----------------- */
-
-
+    /* Public Class ------------------------------------------------------ */
     public DBSetupInsert(Context ctx){
-        this.context =ctx;
+        this.context = ctx;
     }
 
 
 
-    /* SETUP FOOD------------------ */
+    /* Setup Insert To Categories ----------------------------------------- */
+    // To insert to category table
+    public void setupInsertToCategories(String values){
+        try{
+            DBAdapter db = new DBAdapter(context);
+            db.open();
+            db.insert("categories",
+                    "_id, category_name, category_parent_id, category_icon, category_note",
+                    values);
+            db.close();
+        }
+        catch (SQLiteException e){
+            // Toast.makeText(context, "Error; Could not insert categories.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    /* Setup Insert To Food ----------------------------------------------- */
+    // To insert food to food table
     public void setupInsertToFood(String values){
 
-        DBAdapter db = new DBAdapter(context);
-        db.open();
-        db.insert("food",
-                ("_id,food_name,food_manufactor_name,food_serving_size,food_serving_mesurment,food_serving_name_number,food_serving_name_word,food_energy,food_proteins,food_carbohydrates,food_fat,food_energy_calculated,food_proteins_calculated,food_carbohydrates_calculated,food_fat_calculated,food_user_id,food_barcode,food_category_id,food_thumb,food_image_a,food_image_b,food_image_c,food_notes"),
-                values);
+        try {
+            DBAdapter db = new DBAdapter(context);
+            db.open();
+            db.insert("food",
+                    "_id, food_name, food_manufactor_name, food_serving_size_gram, food_serving_size_gram_mesurment, food_serving_size_pcs, food_serving_size_pcs_mesurment, food_energy, food_proteins, food_carbohydrates, food_fat, food_energy_calculated, food_proteins_calculated, food_carbohydrates_calculated, food_fat_calculated, food_user_id, food_barcode, food_category_id, food_thumb, food_image_a, food_image_b, food_image_c, food_notes",
+                    values);
+            db.close();
+        }
+        catch (SQLiteException e){
+        }
 
-    }
-    /* SETUP CATEGORYS-------------- */
-    public void setupInsertToCategories(String values) {
-        DBAdapter db = new DBAdapter(context);
-        db.open();
-        db.insert("categories",
-                "_id, category_name, category_parent_id, category_icon, category_note",
-                values);
-        db.close();
     }
     public void insertAllCategories(){
         setupInsertToCategories("NULL, 'Ekmek', '0', '', NULL");

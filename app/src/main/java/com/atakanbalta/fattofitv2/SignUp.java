@@ -222,7 +222,7 @@ public class SignUp extends AppCompatActivity {
             doubleWeight = Double.parseDouble(stringWeight);
         }
         catch(NumberFormatException nfe) {
-            String errorMessage = "Weight has to be a number.";
+            String errorMessage = "Kilonuz bir sayı olmak zorundadır.";
         }
         if(doubleWeight != 0 ) {
             if(stringMesurment.startsWith("I")){
