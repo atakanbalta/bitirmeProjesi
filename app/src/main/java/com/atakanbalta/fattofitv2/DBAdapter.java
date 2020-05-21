@@ -14,7 +14,7 @@ public class DBAdapter {
 
 
     private static final String databaseName ="fattofitv5";
-    private static final int databaseVersion =  20  ;
+    private static final int databaseVersion =  21  ;
 
 
 
@@ -102,6 +102,19 @@ public class DBAdapter {
                         " fdce_eaten_proteins INT, " +
                         " fdce_eaten_carbs INT, " +
                         " fdce_eaten_fat INT);");
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try{
+                db.execSQL("CREATE TABLE IF NOT EXISTS food_diary_sum (" +
+                        " _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        " food_diary_sum_id INTEGER, " +
+                        " food_diary_sum_date DATE, " +
+                        " food_diary_sum_energy INT, " +
+                        " food_diary_sum_proteins INT, " +
+                        " food_diary_sum_carbs INT, " +
+                        " food_diary_sum_fat INT);");
             }
             catch (SQLException e) {
                 e.printStackTrace();
@@ -279,16 +292,7 @@ public class DBAdapter {
 
     /* 10 Select ----------------------------------------------------------------- */
     public Cursor selectPrimaryKey(String table, String primaryKey, long rowId, String[] fields) throws SQLException {
-        /* Select example:
-        long row = 3;
-        String fields[] = new String[] {
-                "food_id",
-                "food_name",
-                "food_manufactor_name"
-        };
-        Cursor c = db.select("food", "food_id", row, fields);
-        displayRecordFromNotes(c);
-         */
+
 
         Cursor mCursor = db.query(table, fields, primaryKey + "=" + rowId, null, null, null, null, null);
         if (mCursor != null) {
@@ -298,17 +302,7 @@ public class DBAdapter {
     }
 
 
-    /* 10 Select ----------------------------------------------------------------- */
-    /* Select example:
-           Cursor allCategories;
-           String fields[] = new String[] {
-                                "category_id",
-                                "category_name",
-                                "category_parent_id"
-             };
-            allCategories = db.select("categories", fields);
-    */
-    // Select
+
     public Cursor select(String table, String[] fields) throws SQLException
     {
         Cursor mCursor = db.query(table, fields, null, null, null, null, null, null);

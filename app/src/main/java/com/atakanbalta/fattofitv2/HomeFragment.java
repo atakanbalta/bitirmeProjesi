@@ -2,14 +2,17 @@ package com.atakanbalta.fattofitv2;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +30,14 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 
-public class HomeFragment extends Fragment {
+public  class HomeFragment extends Fragment {
 
-    /*- 01 Sınıf Değişkenleri -------------------------------------------------------------- */
+    /*- 01 Class Variables -------------------------------------------------------------- */
     private View mainView;
     private Cursor listCursor;
 
 
-    // Action buttons on toolbar
+
     private MenuItem menuItemAddFood;
 
     // Holding variables
@@ -54,7 +57,7 @@ public class HomeFragment extends Fragment {
 
 
     /*- 02 Fragment Variables ----------------------------------------------------------- */
-    // fragmenti başlatmak için gerekli parametreler
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -64,12 +67,11 @@ public class HomeFragment extends Fragment {
 
 
     /*- 03 Constructur ------------------------------------------------------------------ */
-    // fragmenti başlatmak için gerekli parametreler
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /*- 04 FRAGMENTI YARATMAYA BAŞLA------------------------------------------------------------- */
+    /*- 04 Creating Fragment ------------------------------------------------------------- */
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -80,18 +82,14 @@ public class HomeFragment extends Fragment {
     }
 
     /*- 05 on Activity Created ---------------------------------------------------------- */
-    // Başladığında methodları çalıştır
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /* başlık */
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Anasayfa");
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Home");
 
-        // getDataFromDbAndDisplay
         initalizeHome();
 
-        // menu oluştur
         setHasOptionsMenu(true);
     } // onActivityCreated
 
@@ -106,7 +104,6 @@ public class HomeFragment extends Fragment {
 
 
     /*- 07 set main view ----------------------------------------------------------------- */
-    //view methodu değiştir
     private void setMainView(int id){
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mainView = inflater.inflate(id, null);
@@ -118,19 +115,15 @@ public class HomeFragment extends Fragment {
     /*- 08 on Create Options Menu -------------------------------------------------------- */
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        // Inflate menu
-        MenuInflater menuInflater = ((MainActivity)getActivity()).getMenuInflater();
+        MenuInflater menuInflater = ((FragmentActivity)getActivity()).getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
-
 
         menuItemAddFood = menu.findItem(R.id.menu_action_add_food);
 
-        // Hide  default
         menuItemAddFood.setVisible(true);
     }
 
     /*- 09 on Options Item Selected ------------------------------------------------------ */
-    // Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
 
@@ -140,12 +133,12 @@ public class HomeFragment extends Fragment {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-    /*- METHODLAR -*/
+    /*- Our own methods -*/
 
 
     /*- Initalize home ------------------------------------------------------------ */
     private void initalizeHome(){
-        /* DATE FIND */
+        /* Find date */
         if(currentDateYear.equals("") || currentDateMonth.equals("") || currentDateDay.equals("")) {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
@@ -156,7 +149,7 @@ public class HomeFragment extends Fragment {
             currentDateYear = "" + year;
 
             // Month
-            month = month+1; // Month starts with 0
+            month = month+1;
             if(month < 10){
                 currentDateMonth = "0" + month;
             }
@@ -174,7 +167,7 @@ public class HomeFragment extends Fragment {
         String stringFdDate = currentDateYear + "-" + currentDateMonth + "-" + currentDateDay;
 
 
-        /* tabloyu doldur */
+        /* Fill table */
         updateTableItems(stringFdDate, "0");
         updateTableItems(stringFdDate, "1");
         updateTableItems(stringFdDate, "2");
@@ -183,6 +176,8 @@ public class HomeFragment extends Fragment {
         updateTableItems(stringFdDate, "5");
         updateTableItems(stringFdDate, "6");
 
+        /* Calcualte number of calories today */
+        calcualteNumberOfCalEatenToday(stringFdDate);
 
 
 
@@ -192,6 +187,49 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addFood(0); // 0 == Breakfast
+            }
+        });
+        ImageView imageViewAddLunch = (ImageView)getActivity().findViewById(R.id.imageViewAddLunch);
+        imageViewAddLunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(1); // 1 == Lunch
+            }
+        });
+        ImageView imageViewAddBeforeTraining = (ImageView)getActivity().findViewById(R.id.imageViewAddBeforeTraining);
+        imageViewAddBeforeTraining.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(2); // 2 == Before training
+            }
+        });
+        ImageView imageViewAddAfterTraining = (ImageView)getActivity().findViewById(R.id.imageViewAddAfterTraining);
+        imageViewAddAfterTraining.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(3); // 3 == After training
+            }
+        });
+        ImageView imageViewAddDinner = (ImageView)getActivity().findViewById(R.id.imageViewAddDinner);
+        imageViewAddDinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(4); // 4 == Dinner
+            }
+        });
+        ImageView imageViewAddSnacks = (ImageView)getActivity().findViewById(R.id.imageViewAddSnacks);
+        imageViewAddSnacks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(5); // 5 = Snacks
+            }
+        });
+
+        ImageView imageViewAddSupper = (ImageView)getActivity().findViewById(R.id.imageViewAddSupper);
+        imageViewAddSupper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFood(6); // 6 = supplement
             }
         });
 
@@ -243,6 +281,7 @@ public class HomeFragment extends Fragment {
         };
         Cursor cursorFood;
 
+        // Select for food_diary_cal_eaten
         Cursor cursorFdce;
         String fieldsFdce[] = new String[] {
                 "_id",
@@ -285,12 +324,11 @@ public class HomeFragment extends Fragment {
         int intFdceEatenCarbs = 0;
         int intFdceEatenFat = 0;
 
-        // Loop  cursor
+        // Loop trough cursor
         int intCursorFdCount = cursorFd.getCount();
         for(int x=0;x<intCursorFdCount;x++){
             String stringFdId = cursorFd.getString(0);
 
-            // Variables from food diary
             String fdFoodId = cursorFd.getString(1);
             String fdFoodIdSQL = db.quoteSmart(fdFoodId);
 
@@ -307,10 +345,8 @@ public class HomeFragment extends Fragment {
             int intFdCarbsCalculated = Integer.parseInt(fdCarbsCalculated);
             int intFdFatCalculated = Integer.parseInt(fdFatCalculated);
 
-            // Get food name
             cursorFood = db.select("food", fieldsFood, "_id", fdFoodIdSQL);
 
-            // Variables from food
             String foodID = cursorFood.getString(0);
             String foodName = cursorFood.getString(1);
             String foodManufactorName  = cursorFood.getString(2);
@@ -322,7 +358,6 @@ public class HomeFragment extends Fragment {
                     fdServingSizePcsMesurment;
 
 
-            // Add table rows
             TableLayout tl = null;
             if(stringMealNumber.equals("0")) {
                 tl = (TableLayout) getActivity().findViewById(R.id.tableLayoutBreakfastItems); /* Find Tablelayout defined in main.xml */
@@ -346,25 +381,38 @@ public class HomeFragment extends Fragment {
                 tl = (TableLayout) getActivity().findViewById(R.id.tableLayoutSupperItems); /* Find Tablelayout defined in main.xml */
             }
             TableRow tr1 = new TableRow(getActivity()); /* Create a new row to be added. */
-            tr1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tr1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
             TableRow tr2 = new TableRow(getActivity()); /* Create a new row to be added. */
-            tr2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tr2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-            // Table row: TextView Name
+
             TextView textViewName = new TextView(getActivity()); // Add textview
             textViewName.setText(foodName);
-            tr1.addView(textViewName);
+            textViewName.setTextSize(18);
+            textViewName.setTextColor(Color.DKGRAY);
+            textViewName.setGravity(Gravity.CENTER_VERTICAL);
+            TableRow.LayoutParams paramsName = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            paramsName.setMargins(4, 8, 0, 0); // Left, top, right, bottom
+            tr1.addView(textViewName, paramsName);
 
             // Table row: TextView Energy
             TextView textViewEnergy = new TextView(getActivity()); // Add textview
             textViewEnergy.setText(fdEnergyCalculated);
-            tr1.addView(textViewEnergy);
+            textViewEnergy.setTextSize(18);
+            textViewEnergy.setTextColor(Color.DKGRAY);
+            textViewEnergy.setGravity(Gravity.CENTER_VERTICAL);
+            TableRow.LayoutParams paramsEnergy = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+            paramsEnergy.setMargins(0, 8, 10, 0); // Left, top, right, bottom
+            tr1.addView(textViewEnergy, paramsEnergy);
 
-            // Table row: TextView subLine
+
+            TableRow.LayoutParams paramsSubLine = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            paramsSubLine.setMargins(4, 0, 0, 12); // Left, top, right, bottom
+
             TextView textViewSubLine = new TextView(getActivity()); // Add textview
             textViewSubLine.setText(subLine);
-            tr2.addView(textViewSubLine);
+            tr2.addView(textViewSubLine, paramsSubLine);
 
             // Add row to table
             tl.addView(tr1, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)); /* Add row to TableLayout. */
@@ -397,18 +445,15 @@ public class HomeFragment extends Fragment {
                 {
                     v.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 
-                    // Get the row text
                     Context context = getContext();
                     TableRow row = (TableRow)v;
                     TextView tv = (TextView)row.getChildAt(0);
 
-                    // Send it to edit
                     String tvText ="" + tv.getText(); // Lot VALUE Selected
                     rowOnClickEditDeleteFdLine(tvText);
                 }
             });
 
-            // Sum fields
             intFdceEatenEnergy = intFdceEatenEnergy+intFdEnergyCalculated;
             intFdceEatenProteins = intFdceEatenProteins+intFdProteinsCalculated;
             intFdceEatenCarbs = intFdceEatenCarbs+intFdCarbsCalculated;
@@ -419,7 +464,6 @@ public class HomeFragment extends Fragment {
             cursorFd.moveToNext();
         }
 
-        // Update fdce
         if(stringMealNumber.equals("0")) {
             TextView textViewEnergyX = (TextView)getActivity().findViewById(R.id.textViewEnergyBreakfast);
             textViewEnergyX.setText(""+ intFdceEatenEnergy);
@@ -469,7 +513,6 @@ public class HomeFragment extends Fragment {
     } // updateTableItems
 
 
-    /*- add food to diary select meal number -------------------------------- */
     private void addFoodToDiarySelectMealNumber() {
         /* Change layout */
         int newViewID = R.layout.fragment_home_select_meal_number;
@@ -553,9 +596,10 @@ public class HomeFragment extends Fragment {
         // Send variable
         Bundle bundle = new Bundle();
         bundle.putString("mealNumber", ""+mealNumber); // Put anything what you want
+        bundle.putString("currentFoodId", ""); // Put anything what you want
+        bundle.putString("action", ""); // Put anything what you want
         fragment.setArguments(bundle);
 
-        // Need to pass meal number
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
@@ -573,7 +617,6 @@ public class HomeFragment extends Fragment {
         int newViewID = R.layout.fragment_home_edit_or_delete;
         setMainView(newViewID);
 
-        /* Find information */
         // Select
         String fields[] = new String[] {
                 "_id",
@@ -590,7 +633,7 @@ public class HomeFragment extends Fragment {
         String stringFdDate = currentDateYear + "-" + currentDateMonth + "-" + currentDateDay;
         String stringDateSQL = db.quoteSmart(stringFdDate);
         Cursor cursorFd = db.select("food_diary", fields, "fd_date", stringDateSQL);
-        String stringFdId = cursorFd.getString(0);
+        String stringFdId = "0";
 
         // Select for food name
         String fieldsFood[] = new String[] {
@@ -614,12 +657,11 @@ public class HomeFragment extends Fragment {
         String stringFoodName = "";
         String stringFoodManufactorName  = "";
 
-        // Loop trough cursor, find the corresponding line that has been clicked
         int intCursorFdCount = cursorFd.getCount();
         for(int x=0;x<intCursorFdCount;x++) {
 
 
-            // Variables  food diary
+            stringFdId = cursorFd.getString(0);
             stringFdFoodId = cursorFd.getString(1);
             stringFdFoodIdSQL = db.quoteSmart(stringFdFoodId);
             stringFdServingSizeGram = cursorFd.getString(2);
@@ -631,7 +673,6 @@ public class HomeFragment extends Fragment {
             // Get food name
             cursorFood = db.select("food", fieldsFood, "_id", stringFdFoodIdSQL);
 
-            // Variables  food
             stringFoodID = cursorFood.getString(0);
             stringFoodName = cursorFood.getString(1);
             stringFoodManufactorName  = cursorFood.getString(2);
@@ -656,13 +697,16 @@ public class HomeFragment extends Fragment {
 
         // Show fields
         if(stringFoodName.equals("")) {
-            Toast.makeText(getActivity(), "Error:", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Error: Could not load food name.", Toast.LENGTH_LONG).show();
         }
         else{
             // Add to current
             currentFoodName = stringFoodName;
             currentFoodId   = stringFoodID;
             currentFdId     = stringFdId;
+
+
+
 
             TextView textViewViewFoodName = (TextView)getActivity().findViewById(R.id.textViewViewFoodName);
             textViewViewFoodName.setText(stringFoodName);
@@ -727,7 +771,7 @@ public class HomeFragment extends Fragment {
             });
 
 
-            // Watcher
+            // Listener
             Button buttonSubmitEdit = (Button)getActivity().findViewById(R.id.buttonSubmitEdit);
             buttonSubmitEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -802,6 +846,7 @@ public class HomeFragment extends Fragment {
                 System.out.println("Could not parse " + nfe);
             }
 
+            // Update gram
             double doublePortionSizeGram = Math.round(doublePortionSizePcs * doubleServingSize);
 
             // Update portion size gram
@@ -866,7 +911,6 @@ public class HomeFragment extends Fragment {
     /*- Edit fd line submit ---------------------------------------------------------------- */
     public void OnClickEditFdLineSubmit(){
 
-        // We want to edit food
         // Error
         int error = 0;
 
@@ -954,7 +998,7 @@ public class HomeFragment extends Fragment {
         db.close();
 
 
-        Toast.makeText(getActivity(), "Kaydedildi", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
 
 
         /* Restart fragment */
@@ -967,7 +1011,7 @@ public class HomeFragment extends Fragment {
 
     /*- Delete fd line submit ---------------------------------------------------------------- */
     public void OnClickDeleteFdLineSubmit(){
-        Toast.makeText(getActivity(), "Silindi " + currentFoodName, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Deleted " + currentFoodName, Toast.LENGTH_SHORT).show();
 
 
         // Database
@@ -993,6 +1037,163 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+
+
+    /*- calcualteNumberOfCalEatenToday ------------------------------------------ */
+    public void calcualteNumberOfCalEatenToday(String stringDate){
+
+        /* Database */
+        DBAdapter db = new DBAdapter(getActivity());
+        db.open();
+
+        // Date SQL
+        String stringDateSQL = db.quoteSmart(stringDate);
+
+        String fieldsFoodDiarySum[] = new String[] {
+                "_id",
+                "food_diary_sum_date",
+                "food_diary_sum_energy",
+                "food_diary_sum_proteins",
+                "food_diary_sum_carbs",
+                "food_diary_sum_fat"
+        };
+        Cursor cursorFoodDiarySum = db.select("food_diary_sum", fieldsFoodDiarySum, "food_diary_sum_date", stringDateSQL);
+        int cursorFoodDiarySumCount = cursorFoodDiarySum.getCount();
+
+
+
+
+        String fieldsFdce[] = new String[]{
+                "_id",
+                "fdce_id",
+                "fdce_date",
+                "fdce_meal_no",
+                "fdce_eaten_energy",
+                "fdce_eaten_proteins",
+                "fdce_eaten_carbs",
+                "fdce_eaten_fat"
+        };
+        Cursor cursorFdce = db.select("food_diary_cal_eaten", fieldsFdce, "fdce_date", stringDateSQL);
+        int cursorFdceCount = cursorFdce.getCount();
+
+        // Ready variables
+        int intFdcetEatenEnergy = 0;
+        int intFdcetEatenProteins = 0;
+        int intFdcetEatenCarbs = 0;
+        int intFdcetEatenFat = 0;
+
+        String stringGetFdceMealNo = "";
+        String stringGetFdceEatenEnergy = "";
+        String stringGetFdceEatenProteins = "";
+        String stringGetFdceEatenCarbs = "";
+        String stringGetFdceEatenFat = "";
+        int intFdceEatenEnergy = 0;
+        int intFdceEatenProteins = 0;
+        int intFdceEatenCarbs = 0;
+        int intFdceEatenFat = 0;
+
+        for (int x = 0; x < cursorFdceCount; x++) {
+            // Get variables from cursor
+            stringGetFdceMealNo = cursorFdce.getString(3);
+            stringGetFdceEatenEnergy = cursorFdce.getString(4);
+            stringGetFdceEatenProteins = cursorFdce.getString(5);
+            stringGetFdceEatenCarbs = cursorFdce.getString(6);
+            stringGetFdceEatenFat = cursorFdce.getString(7);
+
+
+            try {
+                intFdceEatenEnergy = Integer.parseInt(stringGetFdceEatenEnergy);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+
+            try {
+                intFdceEatenProteins = Integer.parseInt(stringGetFdceEatenProteins);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+
+            try {
+                intFdceEatenCarbs = Integer.parseInt(stringGetFdceEatenCarbs);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+
+            try {
+                intFdceEatenFat = Integer.parseInt(stringGetFdceEatenFat);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+
+
+            intFdcetEatenEnergy = intFdcetEatenEnergy + intFdceEatenEnergy;
+            intFdcetEatenProteins = intFdcetEatenProteins + intFdceEatenProteins;
+            intFdcetEatenCarbs = intFdcetEatenCarbs + intFdceEatenCarbs;
+            intFdcetEatenFat = intFdcetEatenFat + intFdceEatenFat;
+
+            // Move to next
+            cursorFdce.moveToNext();
+        }
+
+
+        if (cursorFoodDiarySumCount == 0) {
+            // Insert database
+            String insFields = "_id, food_diary_sum_date, food_diary_sum_energy, food_diary_sum_proteins, food_diary_sum_carbs, food_diary_sum_fat";
+            String insValues = "NULL, " + stringDateSQL + ", '" + intFdcetEatenEnergy + "', '" +
+                    intFdcetEatenProteins + "', '" + intFdcetEatenCarbs + "', '" + intFdcetEatenFat + "'";
+            db.insert("food_diary_sum", insFields, insValues);
+        } else {
+            // Update
+            String updateFields[] = new String[]{
+                    "food_diary_sum_energy", "food_diary_sum_proteins", "food_diary_sum_carbs", "food_diary_sum_fat"
+            };
+            String updateValues[] = new String[]{
+                    "'" + intFdcetEatenEnergy + "'",
+                    "'" + intFdcetEatenProteins + "'",
+                    "'" + intFdcetEatenCarbs + "'",
+                    "'" + intFdcetEatenFat + "'"
+            };
+
+            long longFoodDiaryId = Long.parseLong(cursorFoodDiarySum.getString(0));
+
+            db.update("food_diary_sum", "_id", longFoodDiaryId, updateFields, updateValues);
+        }
+
+
+        String fieldsGoal[] = new String[]{
+                "_id",
+                "goal_energy_with_activity_and_diet"
+        };
+        Cursor cursorGoal = db.select("goal", fieldsGoal);
+        cursorGoal.moveToLast();
+        String stringGoalEnergyWithActivityAndDiet = cursorGoal.getString(1);
+
+        // TextView goal
+        TextView textViewBodyGoalWithActivity = (TextView) getActivity().findViewById(R.id.textViewBodyGoalWithActivity);
+        textViewBodyGoalWithActivity.setText(stringGoalEnergyWithActivityAndDiet);
+
+        // TextView Food
+        TextView textViewBodyFood = (TextView) getActivity().findViewById(R.id.textViewBodyFood);
+        textViewBodyFood.setText("" + intFdcetEatenEnergy);
+
+        // TextView Sum
+        int intGoalEnergyWithActivityAndDiet = 0;
+        try {
+            intGoalEnergyWithActivityAndDiet = Integer.parseInt(stringGoalEnergyWithActivityAndDiet);
+        } catch (NumberFormatException nfe) {
+            System.out.println("Could not parse " + nfe);
+        }
+
+        int textViewBodyResult = intGoalEnergyWithActivityAndDiet - intFdcetEatenEnergy;
+
+        TextView textViewBodyRemaining = (TextView) getActivity().findViewById(R.id.textViewBodyRemaining);
+        textViewBodyRemaining.setText("" + textViewBodyResult);
+
+
+
+        db.close();
+    } // calcualteNumberOfCalEatenToday
 
 
 
