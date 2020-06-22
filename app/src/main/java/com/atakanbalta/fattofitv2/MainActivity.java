@@ -95,21 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        /*NAVIGATION -------------------------------------------------------------
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_profile, R.id.nav_goal,R.id.nav_categories,R.id.nav_food)
-                .setDrawerLayout(drawer)
-                .build();
 
-        //NAVIGATION ITEMS--------------------
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-        NAVIGATION ----------------------------------------------*/
 
 
 
@@ -141,23 +127,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(numberRows < 1){
             // Run setup
-            Toast.makeText(this, "Loading setup...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Yükleniyor...", Toast.LENGTH_LONG).show();
             DBSetupInsert setupInsert = new DBSetupInsert(this);
             setupInsert.insertAllCategories();
             setupInsert.insertAllFood();
-            Toast.makeText(this, "Setup completed!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Başlamaya Hazırsınız!", Toast.LENGTH_LONG).show();
 
         }
 
         /* Check if there is user in the user table */
         // Count rows in user table
-        numberRows = db.count("users");
+        /*numberRows = db.count("users");
         if(numberRows < 1){
             // Sign up
             Toast.makeText(this, "You are only few fields away from signing up...", Toast.LENGTH_LONG).show();
             Intent i = new Intent(MainActivity.this, SignUp.class);
             startActivity(i);
-        }
+        }*/
 
 
         /* Close database */

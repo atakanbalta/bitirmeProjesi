@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DBAdapter {
 
@@ -14,7 +15,9 @@ public class DBAdapter {
 
 
     private static final String databaseName ="fattofitv5";
-    private static final int databaseVersion =  21  ;
+    private static final int databaseVersion =  23 ;
+
+
 
 
 
@@ -194,7 +197,7 @@ public class DBAdapter {
         }
 
         @Override
-            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 
             // ! All tables that are going to be dropped need to be listed here

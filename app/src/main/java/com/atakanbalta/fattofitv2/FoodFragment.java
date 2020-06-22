@@ -77,7 +77,7 @@ public class FoodFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Set title */
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Food");
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Yiyecekler");
 
         // Populate the list of categories
         populateListFood();
@@ -313,20 +313,14 @@ public class FoodFragment extends Fragment {
         TextView textViewViewFoodCarbsPerHundred = (TextView) getView().findViewById(R.id.textViewViewFoodCarbsPerHundred);
         TextView textViewViewFoodFatPerHundred = (TextView) getView().findViewById(R.id.textViewViewFoodFatPerHundred);
 
-        TextView textViewViewFoodEnergyPerN = (TextView) getView().findViewById(R.id.textViewViewFoodEnergyPerN);
-        TextView textViewViewFoodProteinsPerN = (TextView) getView().findViewById(R.id.textViewViewFoodProteinsPerN);
-        TextView textViewViewFoodCarbsPerN = (TextView) getView().findViewById(R.id.textViewViewFoodCarbsPerN);
-        TextView textViewViewFoodFatPerN = (TextView) getView().findViewById(R.id.textViewViewFoodFatPerN);
+
 
         textViewViewFoodEnergyPerHundred.setText(stringEnergy);
         textViewViewFoodProteinsPerHundred.setText(stringProteins);
         textViewViewFoodCarbsPerHundred.setText(stringCarbohydrates);
         textViewViewFoodFatPerHundred.setText(stringFat);
 
-        textViewViewFoodEnergyPerN.setText(stringEnergyCalculated);
-        textViewViewFoodProteinsPerN.setText(stringProteinsCalculated);
-        textViewViewFoodCarbsPerN.setText(stringCarbohydratesCalculated);
-        textViewViewFoodFatPerN.setText(stringFatCalculated);
+
 
         db.close();
     }

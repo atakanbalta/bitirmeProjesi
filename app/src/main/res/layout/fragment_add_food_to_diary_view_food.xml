@@ -249,43 +249,7 @@
                     android:text="@string/fat" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:id="@+id/textViewViewFoodBlankPerN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:text="@string/per_meal" />
-
-                <TextView
-                    android:id="@+id/textViewViewFoodEnergyPerN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:text="@string/per_meal" />
-                <TextView
-                    android:id="@+id/textViewViewFoodProteinsPerN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:text="@string/proteins" />
-                <TextView
-                    android:id="@+id/textViewViewFoodCarbsPerN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:text="@string/carbs" />
-                <TextView
-                    android:id="@+id/textViewViewFoodFatPerN"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:text="@string/fat" />
-            </TableRow>
         </TableLayout>
         <!-- //Calories table -->
     </LinearLayout>

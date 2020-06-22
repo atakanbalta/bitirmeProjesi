@@ -266,19 +266,19 @@ public class GoalFragment extends Fragment {
 
         /* Activity level */
         TextView textViewActivityLevel = (TextView)getActivity().findViewById(R.id.textViewActivityLevel);
-        if(goalActivityLevel.equals("0")){
+        if(goalActivityLevel=="0"){
             textViewActivityLevel.setText("Az egzersiz/Hiç yapmıyorum");
         }
-        else if(goalActivityLevel.equals("1")){
+        else if(goalActivityLevel=="1"){
             textViewActivityLevel.setText("Hafif Egzersiz (1–3 gün hafta)");
         }
-        else if(goalActivityLevel.equals("2")){
+        else if(goalActivityLevel=="2"){
             textViewActivityLevel.setText("Orta Düzeyde Egzersiz (3–5 gün hafta)");
         }
-        else if(goalActivityLevel.equals("3")){
+        else if(goalActivityLevel=="3"){
             textViewActivityLevel.setText("Ağır Egzersiz(6–7 gün hafta)");
         }
-        else if(goalActivityLevel.equals("4")){
+        else if(goalActivityLevel=="4"){
             textViewActivityLevel.setText("Çok ağır egzersiz/Profesyonel (Günde iki kere, ekstra ağır antrenman)");
         }
 
@@ -614,7 +614,7 @@ public class GoalFragment extends Fragment {
         String stringCurrentWeight = editTextGoalCurrentWeight.getText().toString();
         double doubleCurrentWeight = 0;
         if(stringCurrentWeight.isEmpty()){
-            Toast.makeText(getActivity(), "Please enter current weight", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Lütfen güncel kilonuzu giriniz", Toast.LENGTH_LONG).show();
             error = 1;
         }
         else{
@@ -622,7 +622,7 @@ public class GoalFragment extends Fragment {
                 doubleCurrentWeight = Double.parseDouble(stringCurrentWeight);
             }
             catch(NumberFormatException nfe) {
-                Toast.makeText(getActivity(), "Current weight has to be a number.\nError: " + nfe.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "güncel kilonuz sayı olmalıdır.\nError: " + nfe.toString(), Toast.LENGTH_LONG).show();
                 error = 1;
             }
         }
@@ -633,7 +633,7 @@ public class GoalFragment extends Fragment {
         String stringTargetWeight = editTextGoalTargetWeight.getText().toString();
         double doubleTargetWeight = 0;
         if(stringTargetWeight.isEmpty()){
-            Toast.makeText(getActivity(), "Please enter target weight", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Hedef kilonuzu giriniz", Toast.LENGTH_LONG).show();
             error = 1;
         }
         else{
@@ -641,7 +641,7 @@ public class GoalFragment extends Fragment {
                 doubleTargetWeight = Double.parseDouble(stringTargetWeight);
             }
             catch(NumberFormatException nfe) {
-                Toast.makeText(getActivity(), "Target weight has to be a number.\nError: " + nfe.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Hedef kilonuz sayı olmak zorundadır.\nError: " + nfe.toString(), Toast.LENGTH_LONG).show();
                 error = 1;
             }
         }

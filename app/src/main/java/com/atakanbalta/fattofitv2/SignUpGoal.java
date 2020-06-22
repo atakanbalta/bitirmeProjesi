@@ -16,32 +16,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUpGoal extends AppCompatActivity {
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up_goal);
 
 
-
-
-        /*Listener */
-        Button buttonSubmit = (Button) findViewById(R.id.buttonSubmit);
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+        /* Listener submit */
+        Button buttonSubmit = (Button)findViewById(R.id.buttonSubmit);
+        buttonSubmit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 signUpGoalSubmit();
-
             }
         });
 
-        // remove error handling
+        /* Remove error handling */
         hideErrorHandling();
 
-        /*mesurment */
+        /* Mesurment used? */
         mesurmentUsed();
 
-
     } // onCreate
-
 
     /* signUpGoalSubmit ----------------------------------------------------- */
     public void signUpGoalSubmit(){
@@ -81,13 +77,18 @@ public class SignUpGoal extends AppCompatActivity {
         if(errorMessage.isEmpty()){
 
             long goalID = 1;
+
             double doubleTargetWeightSQL = db.quoteSmart(doubleTargetWeight);
             db.update("goal", "_id", goalID, "goal_target_weight", doubleTargetWeightSQL);
+
             int intIWantToSQL = db.quoteSmart(intIWantTo);
             db.update("goal", "_id", goalID, "goal_i_want_to", intIWantToSQL);
+
             String stringWeeklyGoalSQL = db.quoteSmart(stringWeeklyGoal);
             db.update("goal", "_id", goalID, "goal_weekly_goal", stringWeeklyGoalSQL);
+
         }
+
         /* Calculate energy */
         if(errorMessage.isEmpty()){
 
@@ -97,14 +98,33 @@ public class SignUpGoal extends AppCompatActivity {
                     "_id",
                     "user_dob",
                     "user_gender",
-                    "user_height",
-                    "user_activity_level"
+                    "user_height"
             };
-            Cursor c = db.selectPrimaryKey("users", "_id", rowID, fields);
+            Cursor c = db.select("users", fields, "_id", rowID);
             String stringUserDob = c.getString(1);
             String stringUserGender  = c.getString(2);
             String stringUserHeight = c.getString(3);
-            String stringUserActivityLevel = c.getString(4);
+
+            // Get weight actvity level
+            rowID = 1;
+            String fieldsGoal[] = new String[] {
+                    "_id",
+                    "goal_current_weight",
+                    "goal_activity_level"
+            };
+            Cursor cGoal = db.select("goal", fieldsGoal, "_id", rowID);
+            String stringUserCurrentWeight = cGoal.getString(1);
+            String stringUserActivityLevel = cGoal.getString(2);
+
+            // Get weight
+            double doubleUserCurrentWeight = 0;
+            try{
+                doubleUserCurrentWeight = Double.parseDouble(stringUserCurrentWeight);
+            }
+            catch(NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+
 
             // Get Age
             String[] items1 = stringUserDob.split("-");
@@ -154,38 +174,33 @@ public class SignUpGoal extends AppCompatActivity {
             //Toast.makeText(this, "DOB=" + stringUserDob + "\nAge=" + stringUserAge + "\nGender=" + stringUserGender + "\nHeight=" + stringUserHeight + "\nActivity level=" + stringUserActivityLevel, Toast.LENGTH_LONG).show();
 
 
-            /*BMR*/
+            long goalID = 1;
 
 
+            /* 1: BRM */
             // Start calculation
-            double bmr = 0;
+            double goalEnergyBMR = 0;
             if(stringUserGender.startsWith("m")){
                 // Male
-                // BMR = 66.5 + (13.75 x kg body weight) + (5.003 x height in cm) - (6.755 x age)
-                bmr = 66.5+(13.75*doubleTargetWeight)+(5.003*doubleUserHeight)-(6.755*intUserAge);
-                //bmr = Math.round(bmr);
-                //Toast.makeText(this, "BMR formula: 66.5+(13.75*" + doubleTargetWeight + ")+(5.003*" + doubleUserHeight + ")-(6.755*" + intUserAge, Toast.LENGTH_LONG).show();
+                goalEnergyBMR = 66.5+(13.75*doubleUserCurrentWeight)+(5.003*doubleUserHeight)-(6.755*intUserAge);
 
             } // if(stringUserGender.startsWith("m")){
             else{
                 // Female
-                // BMR = 55.1 + (9.563 x kg body weight) + (1.850 x height in cm) - (4.676 x age)
-                bmr = 655+(9.563*doubleTargetWeight)+(1.850*doubleUserHeight)-(4.676*intUserAge);
+                goalEnergyBMR = 655+(9.563*doubleUserCurrentWeight)+(1.850*doubleUserHeight)-(4.676*intUserAge);
                 //bmr = Math.round(bmr);
             }
-            bmr = Math.round(bmr);
-            long goalID = 1;
-            double energyBmrSQL = db.quoteSmart(bmr);
+            goalEnergyBMR = Math.round(goalEnergyBMR);
+            double energyBmrSQL = db.quoteSmart(goalEnergyBMR);
             db.update("goal", "_id", goalID, "goal_energy_bmr", energyBmrSQL);
-            //Toast.makeText(this, "BMR before activity: " + bmr, Toast.LENGTH_LONG).show();
 
             // Proteins, carbs and fat with BMR
             // 20-25 % protein
             // 40-50 % carbs
             // 25-35 % fat
-            double proteinsBmr = Math.round(bmr*25/100);
-            double carbsBmr = Math.round(bmr*50/100);
-            double fatBmr = Math.round(bmr*25/100);
+            double proteinsBmr = Math.round(goalEnergyBMR*25/100);
+            double carbsBmr = Math.round(goalEnergyBMR*50/100);
+            double fatBmr = Math.round(goalEnergyBMR*25/100);
 
             double proteinsBmrSQL = db.quoteSmart(proteinsBmr);
             double carbsBmrSQL = db.quoteSmart(carbsBmr);
@@ -195,6 +210,7 @@ public class SignUpGoal extends AppCompatActivity {
             db.update("goal", "_id", goalID, "goal_fat_bmr", fatBmrQL);
 
             /* 2: Diet */
+
             // Loose or gain weight?
             double doubleWeeklyGoal = 0;
             try {
@@ -210,12 +226,12 @@ public class SignUpGoal extends AppCompatActivity {
             kcal = 7700*doubleWeeklyGoal;
             if(intIWantTo == 0){
                 // Loose weight
-                energyDiet = Math.round(bmr - (kcal/7));
+                energyDiet = Math.round((goalEnergyBMR - (kcal/7)) * 1.2);
 
             }
             else{
                 // Gain weight
-                energyDiet = Math.round(bmr + (kcal/7));
+                energyDiet = Math.round((goalEnergyBMR + (kcal/7)) * 1.2);
             }
 
             // Update database
@@ -242,19 +258,19 @@ public class SignUpGoal extends AppCompatActivity {
             // Taking in to account activity
             double energyWithActivity = 0;
             if(stringUserActivityLevel.equals("0")) {
-                energyWithActivity = bmr * 1.2;
+                energyWithActivity = goalEnergyBMR * 1.2;
             }
             else if(stringUserActivityLevel.equals("1")) {
-                energyWithActivity = bmr * 1.375; // slightly_active
+                energyWithActivity = goalEnergyBMR * 1.375; // slightly_active
             }
             else if(stringUserActivityLevel.equals("2")) {
-                energyWithActivity = bmr*1.55; // moderately_active
+                energyWithActivity = goalEnergyBMR*1.55; // moderately_active
             }
             else if(stringUserActivityLevel.equals("3")) {
-                energyWithActivity = bmr*1.725; // active_lifestyle
+                energyWithActivity = goalEnergyBMR*1.725; // active_lifestyle
             }
-            else if(stringUserActivityLevel.equals("3")) {
-                energyWithActivity = bmr * 1.9; // very_active
+            else if(stringUserActivityLevel.equals("4")) {
+                energyWithActivity = goalEnergyBMR * 1.9; // very_active
             }
             energyWithActivity = Math.round(energyWithActivity);
             double energyWithActivitySQL = db.quoteSmart(energyWithActivity);
@@ -269,9 +285,9 @@ public class SignUpGoal extends AppCompatActivity {
             double carbsWithActivity = Math.round(energyWithActivity*50/100);
             double fatWithActivity = Math.round(energyWithActivity*25/100);
 
-            double proteinsWithActivitySQL = db.quoteSmart(proteinsDiet);
-            double carbsWithActivitySQL = db.quoteSmart(carbsDiet);
-            double fatWithActivityQL = db.quoteSmart(fatDiet);
+            double proteinsWithActivitySQL = db.quoteSmart(proteinsWithActivity);
+            double carbsWithActivitySQL = db.quoteSmart(carbsWithActivity);
+            double fatWithActivityQL = db.quoteSmart(fatWithActivity);
             db.update("goal", "_id", goalID, "goal_proteins_with_activity", proteinsWithActivitySQL);
             db.update("goal", "_id", goalID, "goal_carbs_with_activity", carbsWithActivitySQL);
             db.update("goal", "_id", goalID, "goal_fat_with_activity", fatWithActivityQL);
@@ -279,19 +295,38 @@ public class SignUpGoal extends AppCompatActivity {
 
 
             /* 4: With_activity_and_diet */
+            // If you want to loose your weight
+            // With activity
             // 1 kg fat = 7700 kcal
             kcal = 0;
             double energyWithActivityAndDiet = 0;
             kcal = 7700*doubleWeeklyGoal;
             if(intIWantTo == 0){
                 // Loose weight
-                energyWithActivityAndDiet = Math.round(bmr - (kcal/7));
+                energyWithActivityAndDiet = goalEnergyBMR - (kcal/7);
 
             }
             else{
                 // Gain weight
-                energyWithActivityAndDiet = Math.round(bmr + (kcal/7));
+                energyWithActivityAndDiet = goalEnergyBMR + (kcal/7);
             }
+
+            if(stringUserActivityLevel.equals("0")) {
+                energyWithActivityAndDiet= energyWithActivityAndDiet* 1.2;
+            }
+            else if(stringUserActivityLevel.equals("1")) {
+                energyWithActivityAndDiet= energyWithActivityAndDiet* 1.375; // slightly_active
+            }
+            else if(stringUserActivityLevel.equals("2")) {
+                energyWithActivityAndDiet= energyWithActivityAndDiet*1.55; // moderately_active
+            }
+            else if(stringUserActivityLevel.equals("3")) {
+                energyWithActivityAndDiet= energyWithActivityAndDiet*1.725; // active_lifestyle
+            }
+            else if(stringUserActivityLevel.equals("4")) {
+                energyWithActivityAndDiet = energyWithActivityAndDiet* 1.9; // very_active
+            }
+            energyWithActivityAndDiet = Math.round(energyWithActivityAndDiet);
 
             // Update database
             double energyWithActivityAndDietSQL = db.quoteSmart(energyWithActivityAndDiet);
@@ -359,7 +394,7 @@ public class SignUpGoal extends AppCompatActivity {
                 "_id",
                 "user_mesurment"
         };
-        Cursor c = db.selectPrimaryKey("users", "_id", rowID, fields);
+        Cursor c = db.select("users", fields, "_id", rowID);
         String mesurment;
         mesurment = c.getString(1);
 
@@ -403,7 +438,4 @@ public class SignUpGoal extends AppCompatActivity {
 
         return ageS;
     }
-
-
-
-} // main activity
+}

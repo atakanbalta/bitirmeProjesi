@@ -33,7 +33,7 @@
                     android:textColor="@color/colorAppDarkGrey"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/goal_with_activity"
+                    android:text="Gerekli Kalori"
                     android:textSize="18sp" />
                 <TextView
                     android:id="@+id/textViewHeadlineFood"
@@ -53,7 +53,7 @@
                     android:textColor="@color/colorAppDarkGrey"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/sum"
+                    android:text="Kalan"
                     android:textSize="18sp" />
             </TableRow>
 

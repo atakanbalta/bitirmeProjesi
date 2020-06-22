@@ -83,7 +83,7 @@ public class AddFoodToDiaryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Set title */
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add food to diary");
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Günlüğe ekle");
 
 
         /* Get data from fragment */
@@ -228,7 +228,7 @@ public class AddFoodToDiaryFragment extends Fragment {
         String parentCategoryID = listCursorCategory.getString(2);
 
         // Change title
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add food from " + currentCategoryName + " to diary");
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Ekle " + currentCategoryName + " Günlüğe");
 
 
         // Move to sub class
@@ -321,7 +321,7 @@ public class AddFoodToDiaryFragment extends Fragment {
         currentFoodName = listCursorFood.getString(1);
 
         // Change title
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Add " + currentFoodName);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Ekle " + currentFoodName);
 
 
         /*  Get data from database */
@@ -422,20 +422,14 @@ public class AddFoodToDiaryFragment extends Fragment {
         TextView textViewViewFoodCarbsPerHundred = (TextView) getView().findViewById(R.id.textViewViewFoodCarbsPerHundred);
         TextView textViewViewFoodFatPerHundred = (TextView) getView().findViewById(R.id.textViewViewFoodFatPerHundred);
 
-        TextView textViewViewFoodEnergyPerN = (TextView) getView().findViewById(R.id.textViewViewFoodEnergyPerN);
-        TextView textViewViewFoodProteinsPerN = (TextView) getView().findViewById(R.id.textViewViewFoodProteinsPerN);
-        TextView textViewViewFoodCarbsPerN = (TextView) getView().findViewById(R.id.textViewViewFoodCarbsPerN);
-        TextView textViewViewFoodFatPerN = (TextView) getView().findViewById(R.id.textViewViewFoodFatPerN);
+
 
         textViewViewFoodEnergyPerHundred.setText(stringEnergy);
         textViewViewFoodProteinsPerHundred.setText(stringProteins);
         textViewViewFoodCarbsPerHundred.setText(stringCarbohydrates);
         textViewViewFoodFatPerHundred.setText(stringFat);
 
-        textViewViewFoodEnergyPerN.setText(stringEnergyCalculated);
-        textViewViewFoodProteinsPerN.setText(stringProteinsCalculated);
-        textViewViewFoodCarbsPerN.setText(stringCarbohydratesCalculated);
-        textViewViewFoodFatPerN.setText(stringFatCalculated);
+
 
         /* Listener for editTextPortionSizePcs */
         editTextPortionSizePcs.addTextChangedListener(new TextWatcher() {
@@ -754,15 +748,7 @@ public class AddFoodToDiaryFragment extends Fragment {
         // Serving size pcs mesurment
         String stringFdServingSizePcsMesurmentSQL = db.quoteSmart(stringServingSizePcsMesurment);
 
-        // Energy calcualted
-        // Example:
-        //          energy
-        // pr 100   152 kcal
-        //
-        // I eat 21 g
-        //
-        // energy = myConsumotion*kcal/100
-        // Toast.makeText(getActivity(), "Energy: " + doubleFdEnergyCalculated, Toast.LENGTH_LONG).show();
+
         double doubleEnergyPerHundred = Double.parseDouble(stringEnergy);
 
         double doubleFdEnergyCalculated = Math.round((doublePortionSizeGram*doubleEnergyPerHundred)/100);
